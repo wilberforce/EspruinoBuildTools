@@ -8,11 +8,13 @@ if ! type xtensa-esp32-elf-gcc > /dev/null; then
            export PATH=$PATH:`pwd`/xtensa-esp32-elf/bin/
        fi
 fi
-
-source ./Espruino/scripts/provision-framework.sh ESP32
+pushd Espruino
+source ./scripts/provision.sh ESP32
+popd
 #cd Espruino
 #make clean && make
-export IDF_PATH=$ESP_IDF_PATH
+export $ESP_IDF_PATH=`pwd`/esp-idf
+#export IDF_PATH=$ESP_IDF_PATH
 # initialise the submodule folder
 # This will need to be tied to a release
 git submodule update --init
@@ -27,5 +29,5 @@ rm build/espruino-esp32.bin
 make app.tgz
 cd ../Espruino
 make clean
-make
+BOARD=ESP32 make
 echo flashing instructions here...
